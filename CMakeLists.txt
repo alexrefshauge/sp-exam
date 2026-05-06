@@ -6,11 +6,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(doctest REQUIRED)
 
-add_library(stochastic src/Vessel.cpp src/Reaction.cpp)
+# LIB
+add_library(stochastic src/Vessel.cpp src/Reaction.cpp src/Sim.cpp)
 
 target_include_directories(stochastic PUBLIC src include)
 
 
+# TESTS
+add_executable(tests
+    tests/test_main.cpp
+    tests/test_vessel.cpp
+    tests/test_reaction.cpp
+    tests/test_simulation.cpp)
 
-add_executable(tests tests/test_main.cpp tests/test_simulation.cpp tests/test_reactions.cpp)
 target_link_libraries(tests PRIVATE stochastic doctest::doctest)

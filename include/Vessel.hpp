@@ -1,3 +1,6 @@
+#ifndef STOCHASTIC_VESSEL_HPP
+#define STOCHASTIC_VESSEL_HPP
+
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -15,7 +18,8 @@ namespace stochastic
 
     operator ReactionSide() const
     {
-      return {id, {}};
+      std::vector<size_t> species{id};
+      return {species};
     }
   };
 
@@ -30,8 +34,6 @@ namespace stochastic
 
     std::mt19937 generator;
 
-    double getReactionDelay(const Reaction &r);
-
   public:
     Vessel(std::string);
     ~Vessel() = default;
@@ -39,5 +41,13 @@ namespace stochastic
     Species add(std::string, int); // Add species with initial count
     void add(Reaction);            // Add reaction
     void environment();
+
+    double getReactionDelay(const Reaction &r);
+    const std::vector<Reaction> getReactions()
+    {
+      return reactions;
+    };
   };
 }; // namespace sim
+
+#endif

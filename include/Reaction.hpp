@@ -1,34 +1,40 @@
+#ifndef STOCHASTIC_REACTION_HPP
+#define STOCHASTIC_REACTION_HPP
+
 #include <cstddef>
 #include <memory>
+#include <vector>
+#include <utility>
 
 namespace stochastic
 {
     struct ReactionSide
     {
-        size_t species_id;
-        std::weak_ptr<size_t> catalyst;
+        std::vector<size_t> species_ids;
     };
 
     struct Reaction
     {
-        size_t consume_id;
+        std::vector<size_t> inputs;
         double rate;
-        size_t produce_id;
+        std::vector<size_t> outputs;
     };
 
     struct ReactionProducer
     {
-        size_t consume_id;
+        std::vector<size_t> inputs;
         double rate;
     };
 
     inline ReactionProducer operator>>(ReactionSide lhs, double rate)
     {
-        return {lhs.species_id, rate};
+        return {lhs.species_ids, rate};
     }
 
     inline Reaction operator>>=(ReactionProducer p, ReactionSide rhs)
     {
-        return {p.consume_id, p.rate, rhs.species_id};
+        return {p.inputs, p.rate, rhs.species_ids};
     }
 } // namespace stochastic
+
+#endif
