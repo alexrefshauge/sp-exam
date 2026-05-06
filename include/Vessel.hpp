@@ -1,30 +1,34 @@
 #include <string>
 #include <unordered_map>
 
+namespace sim
+{
 
-namespace Sim {
+  struct SpeciesState
+  {
+    size_t count;
+    std::string label;
+  };
+  SpeciesState newSpecies(size_t, std::string);
 
-    struct SpeciesState {
-        size_t cound;
-        std::string label;
-    };
+  struct Rule
+  {
+    int consume;
+    double rate;
+    int produce;
+  };
 
-    class Vessel
-    {
-    private:
-        std::unordered_map<size_t, SpeciesState> state {};
+  class Vessel
+  {
+  private:
+    std::string vessel_name;
+    std::unordered_map<size_t, SpeciesState> state{};
 
-    public:
-        Vessel();
-        ~Vessel();
-    };
-    
-    Vessel::Vessel(/* args */)
-    {
-    }
-    
-    Vessel::~Vessel()
-    {
-    }
-    
-};
+  public:
+    Vessel(std::string);
+    ~Vessel();
+
+    size_t add(std::string, int);
+    void environment();
+  };
+}; // namespace sim

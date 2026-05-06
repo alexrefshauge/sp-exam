@@ -6,6 +6,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(doctest REQUIRED)
 
-add_library(vessel src/Vessel.cpp
-        tests/test_simulation.cpp
-)
+add_library(vessel src/Vessel.cpp)
+
+target_include_directories(vessel PUBLIC src include)
+
+
+
+add_executable(tests tests/test_main.cpp tests/test_simulation.cpp)
+target_link_libraries(tests PRIVATE doctest::doctest)
