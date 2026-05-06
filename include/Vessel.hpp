@@ -1,34 +1,43 @@
 #include <string>
 #include <unordered_map>
+#include <utility>
+#include <vector>
+#include <random>
+#include "Reaction.hpp"
 
-namespace sim
+namespace stochastic
 {
 
-  struct SpeciesState
+  struct Species
   {
-    size_t count;
+    size_t id;
     std::string label;
-  };
-  SpeciesState newSpecies(size_t, std::string);
 
-  struct Rule
-  {
-    int consume;
-    double rate;
-    int produce;
+    operator ReactionSide() const
+    {
+      return {id, {}};
+    }
   };
 
   class Vessel
   {
   private:
+    size_t id_counter = 0;
     std::string vessel_name;
-    std::unordered_map<size_t, SpeciesState> state{};
+    std::unordered_map<std::string, size_t> species_table{};
+    std::vector<size_t> state{};
+    std::vector<Reaction> reactions{};
+
+    std::mt19937 generator;
+
+    double getReactionDelay(const Reaction &r);
 
   public:
     Vessel(std::string);
-    ~Vessel();
+    ~Vessel() = default;
 
-    size_t add(std::string, int);
+    Species add(std::string, int); // Add species with initial count
+    void add(Reaction);            // Add reaction
     void environment();
   };
 }; // namespace sim
