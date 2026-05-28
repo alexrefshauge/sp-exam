@@ -1,0 +1,13 @@
+cmake_minimum_required(VERSION 3.5...4.3.1)
+
+project(stochastic_simlib_example LANGUAGES CXX)
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_subdirectory(../lib ${CMAKE_BINARY_DIR}/stochastic_simlib_build)
+
+add_executable(stochastic_simlib_example
+    main.cpp
+)
+
+target_link_libraries(stochastic_simlib_example PRIVATE stochastic)
