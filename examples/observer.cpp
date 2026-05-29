@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
-#include "models.cpp"
+#include "example_models.hpp"
 
 const auto N_DK = 5822763;
 const auto N_NJ = 589755;
@@ -14,7 +14,7 @@ struct HospitalizationObserver : stochastic::StateObserver
 {
     size_t h_peak = 0;
 
-    void observe(const double t, const VesselState &s) override
+    void observe(const double t, const stochastic::VesselState &s) override
     {
         auto h = s.at("H");
         h_peak = std::max(h, h_peak);

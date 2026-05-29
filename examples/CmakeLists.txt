@@ -8,8 +8,6 @@ if(NOT TARGET stochastic)
     add_subdirectory(../lib ${CMAKE_BINARY_DIR}/stochastic_simlib_build)
 endif()
 
-add_library(models models.cpp)
-
 add_executable(observer
     observer.cpp
 )
@@ -26,8 +24,7 @@ add_executable(multi
     multi.cpp
 )
 
-target_link_libraries(models PRIVATE stochastic)
-target_link_libraries(observer PRIVATE stochastic models)
-target_link_libraries(visitor PRIVATE stochastic models)
-target_link_libraries(plot PRIVATE stochastic models)
-target_link_libraries(multi PRIVATE stochastic models)
+target_link_libraries(observer PRIVATE stochastic stochastic_models)
+target_link_libraries(visitor PRIVATE stochastic stochastic_models)
+target_link_libraries(plot PRIVATE stochastic stochastic_models)
+target_link_libraries(multi PRIVATE stochastic stochastic_models)

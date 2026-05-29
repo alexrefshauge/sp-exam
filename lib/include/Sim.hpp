@@ -33,13 +33,21 @@ namespace stochastic
         SimPool() : pool_size(std::thread::hardware_concurrency()), running_jobs(0)
         {
             workers.reserve(pool_size);
+            for (auto i = 0; i < pool_size; i++)
+            {
+                workers.emplace_back(std::bind(&SimPool::workerThread, this));
+            }
         }
 
-        void run_job(int job_index, sim_job_func_t job);
-        void repeatJob(int job_count, sim_job_func_t job);
+        ~SimPool()
+        {
+            for (auto &t : workers)
+                t.join(); // TODO: check joinable
+        }
+
+        void repeat_job(int job_count, sim_job_func_t job);
 
         void workerThread();
-        worker_job_t nextJob();
     };
 }
 

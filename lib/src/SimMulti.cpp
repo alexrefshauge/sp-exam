@@ -1,4 +1,5 @@
 #include "Vessel.hpp"
+#include <iostream>
 
 namespace stochastic
 {
@@ -8,7 +9,7 @@ namespace stochastic
             throw std::runtime_error("Concurrent simulations with observers are not supported yet");
 
         SimPool pool{};
-        pool.repeatJob(sim_count, [&](int job_index)
-                       { simulate(sim_time, start_seed + job_index); });
+        pool.repeat_job(sim_count, [&](int job_index)
+                        { simulate(sim_time, start_seed + job_index); });
     }
 }

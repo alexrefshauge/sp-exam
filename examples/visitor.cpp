@@ -3,28 +3,28 @@
 #include <iostream>
 #include <fstream>
 #include <set>
-#include "models.cpp"
+#include "example_models.hpp"
 
 struct GraphReactionVisitor : stochastic::VesselVisitor
 {
     std::map<std::string, size_t> symbols;
     std::string modelName;
-    std::vector<Species> species;
-    std::vector<Reaction> reactions;
+    std::vector<stochastic::Species> species;
+    std::vector<stochastic::Reaction> reactions;
 
     GraphReactionVisitor() : symbols(), modelName{} {}
 
-    void visit(const Reaction &r) override
+    void visit(const stochastic::Reaction &r) override
     {
         reactions.push_back(r);
     }
 
-    void visit(const Species &s) override
+    void visit(const stochastic::Species &s) override
     {
         species.push_back(s);
     }
 
-    void visit(const Vessel &v) override
+    void visit(const stochastic::Vessel &v) override
     {
         modelName = v.getName();
     }

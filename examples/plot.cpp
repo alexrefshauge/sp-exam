@@ -1,5 +1,6 @@
-#include "models.cpp"
+#include "example_models.hpp"
 #include <fstream>
+#include <Vessel.hpp>
 
 struct PlotObserver : stochastic::StateObserver
 {
@@ -15,7 +16,7 @@ struct PlotObserver : stochastic::StateObserver
         file.close();
     }
 
-    void observe(const double t, const VesselState &s) override
+    void observe(const double t, const stochastic::VesselState &s) override
     {
         file << t << ","
              << s.at("DA") << ","

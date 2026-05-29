@@ -4,35 +4,26 @@
 
 namespace stochastic
 {
-    void SimPool::run_job(int job_index, sim_job_t job)
-    {
-        running_jobs++;
-        std::cout << "running job #" << job_index << std::endl;
-        std::thread t(job, job_index);
-        running_jobs--;
-    }
-
     void SimPool::workerThread()
     {
         worker_job_t job;
         while (true)
         {
-            job_lock.lock();
+            job_lock.lock(); // Claim next job in queue
             if (jobs.empty())
             {
+                job_lock.unlock();
                 return;
             }
-            job_lock.unlock();
+            job = std::move(jobs.front());
+            jobs.pop();
+            job_lock.unlock(); // Unlock job queue for other workers
 
-            job();
+            job(); // Run job
         }
     }
 
-    worker_job_t SimPool::nextJob()
-    {
-    }
-
-    void SimPool::repeatJob(int job_count, sim_job_t job)
+    void SimPool::repeat_job(int job_count, sim_job_func_t job)
     {
         auto job_index = 0;
         job_lock.lock();

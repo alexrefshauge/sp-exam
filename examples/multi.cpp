@@ -1,8 +1,10 @@
-#include "models.cpp"
+#include <iostream>
+#include "example_models.hpp"
 
 int main()
 {
-    auto v = abc(100, 0, 1);
-    SimPool p{};
-    v.simulate_multi(10, 42, 100);
+    auto v = seihr(10000);
+    stochastic::SimPool p{};
+    v.simulate_multi(100, 42, 100);
+    std::cout << "started!" << std::endl;
 }

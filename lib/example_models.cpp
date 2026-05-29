@@ -1,6 +1,20 @@
-#include <Vessel.hpp>
+#include "example_models.hpp"
 
 using namespace stochastic;
+
+Vessel abc(int A0, int B0, int C0)
+{
+    auto rate = 0.001;
+    auto v = stochastic::Vessel("A + C -> B + C");
+
+    auto A = v.add("A", A0);
+    auto B = v.add("B", B0);
+    auto C = v.add("C", C0);
+
+    v.add(A + C >> rate >>= B + C);
+
+    return v;
+}
 
 Vessel seihr(uint32_t N)
 {
@@ -73,19 +87,5 @@ Vessel circadian()
     v.add(R >> deltaR >>= env);
     v.add(MA >> deltaMA >>= env);
     v.add(MR >> deltaMR >>= env);
-    return v;
-}
-
-Vessel abc(int A0, int B0, int C0)
-{
-    auto rate = 0.001;
-    auto v = stochastic::Vessel("A + C -> B + C");
-
-    auto A = v.add("A", A0);
-    auto B = v.add("B", B0);
-    auto C = v.add("C", C0);
-
-    v.add(A + B >> rate >>= B + C);
-
     return v;
 }
