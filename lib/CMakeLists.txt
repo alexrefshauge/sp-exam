@@ -14,6 +14,8 @@ endif()
 add_library(stochastic
     src/Vessel.cpp
     src/Sim.cpp
+    src/SimMulti.cpp
+    src/SimPool.cpp
 )
 
 target_include_directories(stochastic PUBLIC src include)
@@ -29,6 +31,7 @@ if(STOCHASTIC_SIMLIB_BUILD_TESTS)
         tests/test_reaction.cpp
         tests/test_symbolTable.cpp
         tests/test_simulation.cpp
+        tests/test_pool.cpp
     )
 
     target_link_libraries(tests PRIVATE stochastic doctest::doctest)

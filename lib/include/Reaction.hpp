@@ -61,15 +61,6 @@ namespace stochastic
 
         void accept(VesselVisitor &v);
     };
-
-    struct VesselVisitor
-    {
-        virtual void visit(const Reaction *r) = 0;
-        virtual void visit(const Species *s) = 0;
-    };
-
-    inline void Reaction::accept(VesselVisitor &v) { v.visit(this); }
-    inline void Species::accept(VesselVisitor &v) { v.visit(this); }
 } // namespace stochastic
 
 #endif
