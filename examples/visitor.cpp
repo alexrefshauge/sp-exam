@@ -39,6 +39,9 @@ struct GraphReactionVisitor : stochastic::VesselVisitor
         file << "digraph {\n";
         for (auto s : species)
         {
+            if (s.label == "_ENV")
+                continue;
+
             auto sNode = std::string("s").append(std::to_string(sCount++));
             speciesNode[s.label] = sNode;
             file << "\t"
@@ -47,6 +50,7 @@ struct GraphReactionVisitor : stochastic::VesselVisitor
         }
         for (auto r : reactions)
         {
+
             auto rNode = std::string("r").append(std::to_string(rCount++));
             file << "\t"
                  << rNode << "[label=\"" << r.rate << "\",shape=\"oval\",style=\"filled\",fillcolor=\"yellow\"];\n";
@@ -59,13 +63,12 @@ struct GraphReactionVisitor : stochastic::VesselVisitor
                 product.insert(p);
             for (auto i : inputs)
             {
-                if (!product.contains(i))
-                    file << "\t"
-                         << speciesNode[i] << "->" << rNode << ";\n";
+                file << "\t"
+                     << speciesNode[i] << "->" << rNode << ";\n";
             }
             for (auto p : product)
             {
-                if (!inputs.contains(p))
+                if (!inputs.contains(p) && p != "_ENV")
                     file << "\t"
                          << rNode << "->" << speciesNode[p] << ";\n";
             }

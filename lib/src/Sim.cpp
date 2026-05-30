@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <algorithm>
+#include <mutex>
 
 namespace stochastic
 {
@@ -51,16 +52,16 @@ namespace stochastic
             for (auto i : r.product)
                 state[i]++;
 
-            observer_lock.lock();
+            std::lock_guard<std::mutex> guard(*observer_lock);
             for (auto o : sim_observers)
-                o->observe(t, state);
-            observer_lock.unlock();
+                o->observe(seed, t, state);
         }
         return;
     }
 
     void Vessel::registerObserver(std::shared_ptr<StateObserver> observer)
     {
+        std::lock_guard<std::mutex> guard(*observer_lock);
         observers.push_back(observer);
     }
 } // namespace stochastic

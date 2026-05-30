@@ -7,6 +7,9 @@
 #include <string>
 #include <thread>
 #include <queue>
+#include <vector>
+#include <mutex>
+#include <condition_variable>
 
 namespace stochastic
 {
@@ -15,7 +18,7 @@ namespace stochastic
     struct StateObserver
     {
         virtual ~StateObserver() = default;
-        virtual void observe(const double t, const VesselState &s) = 0;
+        virtual void observe(const int seed, const double t, const VesselState &s) = 0;
     };
 
     typedef std::function<void(int)> sim_job_func_t;
@@ -27,10 +30,13 @@ namespace stochastic
         int running_jobs;
         std::vector<std::thread> workers;
         std::queue<worker_job_t> jobs;
+        bool ready;
+        bool shutting_down;
 
         std::mutex job_lock;
+        std::condition_variable job_cv;
 
-        SimPool() : pool_size(std::thread::hardware_concurrency()), running_jobs(0)
+        SimPool() : pool_size(std::thread::hardware_concurrency()), running_jobs(0), ready(false), shutting_down(false)
         {
             workers.reserve(pool_size);
             for (auto i = 0; i < pool_size; i++)
@@ -39,11 +45,12 @@ namespace stochastic
             }
         }
 
-        ~SimPool()
-        {
-            for (auto &t : workers)
-                t.join(); // TODO: check joinable
-        }
+        ~SimPool();
+
+        SimPool(const SimPool &) = delete;
+        SimPool &operator=(const SimPool &) = delete;
+        SimPool(SimPool &&) = delete;
+        SimPool &operator=(SimPool &&) = delete;
 
         void repeat_job(int job_count, sim_job_func_t job);
 

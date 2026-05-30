@@ -8,6 +8,8 @@
 #include <vector>
 #include <random>
 #include <map>
+#include <memory>
+#include <mutex>
 
 #include "Reaction.hpp"
 #include "SymbolTable.hpp"
@@ -29,6 +31,10 @@ namespace stochastic
   public:
     Vessel(std::string);
     ~Vessel() = default;
+    Vessel(const Vessel &) = delete;
+    Vessel &operator=(const Vessel &) = delete;
+    Vessel(Vessel &&) noexcept = default;
+    Vessel &operator=(Vessel &&) noexcept = default;
 
     std::string getName() const;
 

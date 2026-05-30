@@ -6,32 +6,53 @@ namespace stochastic
 {
     void SimPool::workerThread()
     {
-        worker_job_t job;
         while (true)
         {
-            job_lock.lock(); // Claim next job in queue
-            if (jobs.empty())
+            worker_job_t job;
             {
-                job_lock.unlock();
-                return;
-            }
-            job = std::move(jobs.front());
-            jobs.pop();
-            job_lock.unlock(); // Unlock job queue for other workers
+                std::unique_lock<std::mutex> lock(job_lock);
+                job_cv.wait(lock, [&]()
+                            { return shutting_down || !jobs.empty(); });
 
-            job(); // Run job
+                if (shutting_down && jobs.empty())
+                {
+                    return;
+                }
+
+                job = std::move(jobs.front());
+                jobs.pop();
+            }
+
+            job();
         }
     }
 
     void SimPool::repeat_job(int job_count, sim_job_func_t job)
     {
-        auto job_index = 0;
-        job_lock.lock();
+        std::lock_guard<std::mutex> lock(job_lock);
         for (auto job_index = 0; job_index < job_count; job_index++)
         {
             jobs.emplace(std::bind(job, job_index));
         }
+        ready = true;
+        job_cv.notify_all();
+    }
 
-        job_lock.unlock();
+    SimPool::~SimPool()
+    {
+        {
+            std::lock_guard<std::mutex> lock(job_lock);
+            shutting_down = true;
+            ready = true;
+        }
+        job_cv.notify_all();
+
+        for (auto &t : workers)
+        {
+            if (t.joinable())
+            {
+                t.join();
+            }
+        }
     }
 }

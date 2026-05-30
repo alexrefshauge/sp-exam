@@ -13,7 +13,7 @@ struct SeihrPlotter : stochastic::StateObserver
 
     SeihrPlotter() : s_series(), e_series(), i_series(), h_series(), r_series() {}
 
-    void observe(const double t, const stochastic::VesselState &s) override
+    void observe(int seed, const double t, const stochastic::VesselState &s) override
     {
         s_series.emplace_back(t, s.at("S"));
         e_series.emplace_back(t, s.at("E"));

@@ -9,7 +9,9 @@
 namespace stochastic
 {
     const std::string ENV_LABEL = "_ENV";
-    Vessel::Vessel(std::string name) : vessel_name(std::move(name))
+    Vessel::Vessel(std::string name)
+        : vessel_name(std::move(name)),
+          observer_lock(std::make_unique<std::mutex>())
     {
     }
 
