@@ -42,9 +42,7 @@ namespace stochastic
 
             auto r = reactions[next_reaction];
 
-            if (std::any_of(r.inputs.begin(), r.inputs.end(),
-                            [&](std::string s)
-                            { return state[s] <= 0; }))
+            if (min_delay == INFINITY)
                 continue;
 
             for (auto i : r.inputs)

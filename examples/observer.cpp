@@ -5,9 +5,6 @@
 #include <chrono>
 #include "example_models.hpp"
 
-const auto N_DK = 5822763;
-const auto N_NJ = 589755;
-
 const std::string outHeader = "t,s,e,i,h,r\n";
 
 struct HospitalizationObserver : stochastic::StateObserver

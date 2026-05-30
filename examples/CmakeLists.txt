@@ -26,5 +26,5 @@ add_executable(multi
 
 target_link_libraries(observer PRIVATE stochastic stochastic_models)
 target_link_libraries(visitor PRIVATE stochastic stochastic_models)
-target_link_libraries(plot PRIVATE stochastic stochastic_models)
+target_link_libraries(plot PRIVATE stochastic stochastic_models gnuplot_iostream)
 target_link_libraries(multi PRIVATE stochastic stochastic_models)

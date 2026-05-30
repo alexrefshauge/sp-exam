@@ -9,18 +9,18 @@ void single_thread_simulation(benchmark::State &state)
     {
         for (auto i = 0; i < 100; i++)
         {
-            v.simulate(48, 42);
+            v.simulate(48, 42 + i);
         }
     }
 }
-BENCHMARK(single_thread_simulation)->ThreadRange(12, 12);
+BENCHMARK(single_thread_simulation);
 
 void multi_thread_simulation(benchmark::State &state)
 {
     auto v = circadian();
     for (auto _ : state)
     {
-        v.simulate_multi(48, 42, 20);
+        v.simulate_multi(48, 42, 100);
     }
 }
-BENCHMARK(single_thread_simulation)->ThreadRange(12, 12);
+BENCHMARK(multi_thread_simulation);

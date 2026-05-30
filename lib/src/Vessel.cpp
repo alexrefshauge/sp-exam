@@ -36,6 +36,16 @@ namespace stochastic
 
     double Vessel::getReactionDelay(const Reaction &r, VesselState &s, std::mt19937 &generator) const
     {
+        std::map<std::string, int> input_count;
+        for (auto i : r.inputs)
+            input_count[i]++;
+
+        for (auto &pair : input_count)
+        {
+            if (s.at(pair.first) < pair.second)
+                return INFINITY;
+        }
+
         auto inputProduct = 1.0;
         for (auto i : r.inputs)
             inputProduct *= s[i];
