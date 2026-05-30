@@ -3,7 +3,7 @@
 
 namespace stochastic
 {
-    void Vessel::simulate_multi(double sim_time, int start_seed, int sim_count) const
+    void Vessel::simulate_multi(double sim_time, int start_seed, int sim_count)
     {
         if (observers.size() > 0)
             throw std::runtime_error("Concurrent simulations with observers are not supported yet");

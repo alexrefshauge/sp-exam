@@ -5,16 +5,16 @@
 
 namespace stochastic
 {
-    void Vessel::simulate(double sim_time) const
+    void Vessel::simulate(double sim_time)
     {
         std::random_device rd;
         int seed = rd();
         simulate(sim_time, seed);
     }
 
-    void Vessel::simulate(double sim_time, int seed) const
+    void Vessel::simulate(double sim_time, int seed)
     {
-        std::map<std::string, size_t> state = newState();
+        VesselState state = newState();
         const auto reactions = getReactions();
         const auto sim_observers = observers;
         const auto reaction_count = reactions.size();
@@ -51,8 +51,10 @@ namespace stochastic
             for (auto i : r.product)
                 state[i]++;
 
+            observer_lock.lock();
             for (auto o : sim_observers)
                 o->observe(t, state);
+            observer_lock.unlock();
         }
         return;
     }

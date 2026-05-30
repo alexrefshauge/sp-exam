@@ -6,5 +6,4 @@ int main()
     auto v = seihr(10000);
     stochastic::SimPool p{};
     v.simulate_multi(100, 42, 100);
-    std::cout << "started!" << std::endl;
 }

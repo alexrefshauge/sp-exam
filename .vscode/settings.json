@@ -1,3 +1,4 @@
 {
-	"cmake.sourceDirectory": "/mnt/c/Users/sande/Github/sp-exam"
+	"cmake.sourceDirectory": "/mnt/c/Users/sande/Github/sp-exam",
+	"perfanno.perfFile": "perf.out"
 }

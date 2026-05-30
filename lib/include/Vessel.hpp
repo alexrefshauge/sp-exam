@@ -24,6 +24,7 @@ namespace stochastic
     std::vector<Reaction> reactions{};
 
     std::vector<std::shared_ptr<StateObserver>> observers;
+    std::unique_ptr<std::mutex> observer_lock;
 
   public:
     Vessel(std::string);
@@ -35,18 +36,15 @@ namespace stochastic
     void add(Reaction);            // Add reaction
     Species environment();         // Add and return the environment species "_ENV"
 
-    double getReactionDelay(const Reaction &r, VesselState &s, std::mt19937 &generator) const;
-    const std::vector<Reaction> getReactions() const
-    {
-      return reactions;
-    };
+    double getReactionDelay(const SimReaction &r, const VesselState &s, std::mt19937 &generator) const;
+    const std::vector<SimReaction> getReactions() const;
 
     VesselState newState() const;
 
-    void simulate(double sim_time) const;
-    void simulate(double sim_time, int seed) const;
+    void simulate(double sim_time);
+    void simulate(double sim_time, int seed);
 
-    void simulate_multi(double sim_time, int start_seed, int sim_count) const;
+    void simulate_multi(double sim_time, int start_seed, int sim_count);
 
     void registerObserver(std::shared_ptr<StateObserver> observer);
     void accept(VesselVisitor &v) const;

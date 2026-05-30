@@ -7,15 +7,25 @@ void single_thread_simulation(benchmark::State &state)
     auto v = circadian();
     for (auto _ : state)
     {
+        v.simulate(48, 42);
+    }
+}
+BENCHMARK(single_thread_simulation)->Unit(benchmark::kMillisecond);
+
+void single_thread_100_simulation(benchmark::State &state)
+{
+    auto v = circadian();
+    for (auto _ : state)
+    {
         for (auto i = 0; i < 100; i++)
         {
             v.simulate(48, 42 + i);
         }
     }
 }
-BENCHMARK(single_thread_simulation);
+BENCHMARK(single_thread_100_simulation)->Unit(benchmark::kMillisecond);
 
-void multi_thread_simulation(benchmark::State &state)
+void multi_thread_100_simulation(benchmark::State &state)
 {
     auto v = circadian();
     for (auto _ : state)
@@ -23,4 +33,4 @@ void multi_thread_simulation(benchmark::State &state)
         v.simulate_multi(48, 42, 100);
     }
 }
-BENCHMARK(multi_thread_simulation);
+BENCHMARK(multi_thread_100_simulation)->Unit(benchmark::kMillisecond);

@@ -3,14 +3,14 @@
 
 #include <cstddef>
 #include <functional>
-#include <map>
+#include <unordered_map>
 #include <string>
 #include <thread>
 #include <queue>
 
 namespace stochastic
 {
-    using VesselState = std::map<std::string, std::size_t>;
+    using VesselState = std::unordered_map<std::string, std::size_t>;
 
     struct StateObserver
     {

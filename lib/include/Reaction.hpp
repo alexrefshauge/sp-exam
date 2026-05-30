@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 #include <utility>
+#include <map>
+#include <unordered_map>
 
 namespace stochastic
 {
@@ -15,6 +17,7 @@ namespace stochastic
     };
 
     struct VesselVisitor; // Forward declaration for Reaction::accept
+    struct SimReaction;
     struct Reaction
     {
         ReactionSide inputs;
@@ -22,6 +25,12 @@ namespace stochastic
         ReactionSide product;
 
         void accept(VesselVisitor &v);
+        SimReaction toSimReaction() const;
+    };
+
+    struct SimReaction : Reaction
+    {
+        std::unordered_map<std::string, int> input_reactant_count;
     };
 
     struct ReactionProducer

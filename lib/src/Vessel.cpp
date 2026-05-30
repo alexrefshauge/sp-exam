@@ -34,21 +34,44 @@ namespace stochastic
         return env;
     }
 
-    double Vessel::getReactionDelay(const Reaction &r, VesselState &s, std::mt19937 &generator) const
+    SimReaction Reaction::toSimReaction() const
     {
-        std::map<std::string, int> input_count;
-        for (auto i : r.inputs)
-            input_count[i]++;
+        SimReaction sim_reaction{};
+        sim_reaction.inputs = inputs;
+        sim_reaction.rate = rate;
+        sim_reaction.product = product;
 
-        for (auto &pair : input_count)
+        for (const auto &reactant : inputs)
         {
-            if (s.at(pair.first) < pair.second)
-                return INFINITY;
+            sim_reaction.input_reactant_count[reactant]++;
         }
 
+        return sim_reaction;
+    }
+
+    const std::vector<SimReaction> Vessel::getReactions() const
+    {
+        std::vector<SimReaction> sim_reactions;
+        for (auto &r : reactions)
+            sim_reactions.push_back(r.toSimReaction());
+        return sim_reactions;
+    }
+
+    double Vessel::getReactionDelay(const SimReaction &r, const VesselState &s, std::mt19937 &generator) const
+    {
         auto inputProduct = 1.0;
-        for (auto i : r.inputs)
-            inputProduct *= s[i];
+        for (const auto &reactant_count : r.input_reactant_count)
+        {
+            const auto &reactant = reactant_count.first;
+            const auto required_count = reactant_count.second;
+            const auto state_it = s.find(reactant);
+            if (state_it == s.end() || state_it->second < static_cast<std::size_t>(required_count))
+                return INFINITY;
+
+            // Preserve multiplicity semantics from r.inputs with repeated multiplication.
+            for (int i = 0; i < required_count; i++)
+                inputProduct *= static_cast<double>(state_it->second);
+        }
         std::exponential_distribution<double> distribution(r.rate * inputProduct);
         return distribution(generator);
     }

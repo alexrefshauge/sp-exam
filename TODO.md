@@ -10,7 +10,7 @@ added. Demonstrate the usage with reactants. Constrain the supported types based
 
 - [x] Demonstrate the application of the library on the three examples (shown in Fig. 1, 2, 3).
 
-- [ ] Display simulation plots of the amounts over time. Use external libraries (like Qt or ImGui) to visualize.
+- [x] Display simulation plots of the amounts over time. Use external libraries (like Qt or ImGui) to visualize.
 
 - [x] Implement a generic support for a user-supplied trajectory state observer (allowing deep optimizations) or
 provide a lazy trajectory generation interface (coroutine). The observer itself should not be part of the library,
